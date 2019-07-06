@@ -1,0 +1,40 @@
+相似度计算：余弦相似度算法
+
+问题查找
+
+问题推送:
+
+
+
+    系统中存在许多没有被浏览的问题
+
+
+
+热门问题列表
+    热门：
+        最近，问的最多的问题的 类型数目 （ mysql: 90, mongodb: 100, c: 4 ）
+        最近一个月内，被浏览次数最多，  的问题
+
+
+https://segmentfault.com/questions?page=7845
+
+section.stream-list__item:nth-child(1) > div:nth-child(2) > h2:nth-child(2) > a:nth-child(1)
+section.stream-list__item:nth-child(7) > div:nth-child(2) > h2:nth-child(2) > a:nth-child(1)
+section.stream-list__item:nth-child(30) > div:nth-child(2) > h2:nth-child(2) > a:nth-child(1)
+section.stream-list__item:nth-child(24) > div:nth-child(2) > h2:nth-child(2) > a:nth-child(1)
+
+
+section.stream-list__item:nth-child(30) > div:nth-child(2) > h2:nth-child(2) > a:nth-child(1)
+
+
+html body.qa-index div.wrap div.container div.row div.col-xs-12.col-md-9.main div.stream-list.question-stream section.stream-list__item div.summary h2.title a
+html body.qa-index div.wrap div.container div.row div.col-xs-12.col-md-9.main div.stream-list.question-stream section.stream-list__item div.summary h2.title a
+
+
+
+
+
+
+
+/html/body/div[3]/div[2]/div/div[1]/div[2]/section[2]/div[2]/h2/a
+/html/body/div[3]/div[2]/div/div[1]/div[2]/section[5]/div[2]/h2/a

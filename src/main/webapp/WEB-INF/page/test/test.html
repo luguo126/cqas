@@ -1,0 +1,50 @@
+<p>The error I get is: Uncaught PDOException: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The multi-part identifier “<a href="mailto:my@email.com">my@email.com</a>” could not be bound. in C:\inetpub\wwwroot\index.php:59</p>
+<p>Row 59 being $stmt-&gt;execute();.</p>
+<p>I believe the issue comes from my SQL query but I am not 100% sure.</p>
+<p>The way the code works is by getting values from a POST input and it checks in a row and column if it contains said value in a schema.</p>
+<p>Additionally, I am using MSSQL(not MySQLi) and PHP for the task.</p>
+<p>This is the main bit where I want the php code to send an SQL query and the check if the result exists.</p>
+<pre><code class="lang-php">&lt;?php
+    include &quot;connect.php&quot;;
+
+    if(isset($_POST[&#39;login&#39;]))
+    {
+        $email = $_POST[&#39;EMAIL&#39;];
+        $password = $_POST[&#39;PASSWORD&#39;];
+
+        $conn-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn-&gt;prepare(&quot;SELECT * FROM users WHERE EMAIL=$email;&quot;);
+        $stmt-&gt;execute();
+
+        $count= $stmt-&gt;rowCount();
+        echo &quot;Row count: $count \n&quot;;
+    }
+?&gt;
+</code></pre>
+<p>Just to mention I have tried all kinds of changes to the SQL query like:</p>
+<p>$stmt = $conn-&gt;prepare(“SELECT * FROM users WHERE EMAIL=’”.$email.”‘;”);</p>
+<p>and</p>
+<p>$stmt = $conn-&gt;prepare(“SELECT * FROM users WHERE EMAIL=?;”);</p>
+<p>with an array input that had $email in it.</p>
+<p>All returned the same identical error.</p>
+<p>Here I have the connect.php, just in case the issue might come from here.</p>
+<pre><code class="lang-php">&lt;?php
+        $servername = &quot;localhost&quot;;
+        $username = &quot;sa&quot;;
+        $password = &quot;&quot;;
+
+        try
+        {
+            $conn = new PDO(&quot;sqlsrv:Server=$servername; Database=db&quot;, $username, $password);
+            // set the PDO error mode to exception
+            $conn-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            echo &quot;Connected!&quot;;
+            return $conn;
+        }
+
+        catch(PDOException $e)
+        {
+            echo &quot;Connection failed: &quot; . $e-&gt;getMessage();
+        }
+?&gt;
+</code></pre>

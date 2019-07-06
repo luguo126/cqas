@@ -1,0 +1,15 @@
+mvn eclipse:eclipse
+mvn eclipse:clean
+
+mvn idea:idea
+
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'gibili' for key 'PRIMARY'
+Unterminated [&lt;c:if] tag
+
+
+Neither BindingResult nor plain target object for bean name 'user' available as request attribute
+
+
+没有写 mapper
+直接调用
+javax.servlet.ServletException: org.springframework.web.util.NestedServletException: Handler dispatch failed; nested exception is java.lang.StackOverflowError

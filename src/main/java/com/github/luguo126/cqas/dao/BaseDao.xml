@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.github.luguo126.cqas.dao.BaseDao" >
+
+
+    <select id="findQuestionByUid" parameterType="String" resultType="question">
+        select * from question
+            where user_id = #{uid}
+    </select>
+
+    <select id="findUserByUid" parameterType="String" resultType="user">
+        select * from user
+            where user_id = #{uid}
+    </select>
+
+    <select id="findQuestionByQid" parameterType="long" resultType="question">
+        select * from question
+            where question_id = #{qid}
+    </select>
+
+    <!-- 删除问题，ID为参数; 级联删除 -->
+    <delete id="delete_question_by_qid" parameterType="long">
+        delete from question
+            where question_id = #{qid};
+    </delete>
+
+
+    <select id="findQuestions"  resultType="question">
+        select title from question
+    </select>
+
+    <select id="findAllQuestions"  resultType="question">
+        select * from question
+    </select>
+
+    <update id="update_question"  parameterType="question">
+        update question set
+            type = #{type},
+            content = #{content},
+            content_md = #{content_md},
+            title = #{title}
+        where question_id = #{question_id}
+    </update>
+
+    <update id="update_user_password" parameterType="user">
+        update user set
+            password = #{password}
+        where user_id = #{user_id}
+    </update>
+
+    <select id="findAnswerByQid"  resultType="answer" parameterType="long">
+        select * from answer
+        where question_id = #{qid}
+    </select>
+
+</mapper>

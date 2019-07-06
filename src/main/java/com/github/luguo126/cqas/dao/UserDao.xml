@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<!--在mapper文件中引入缓存策略-->
+<!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+<!-- ????? -->
+
+
+
+
+<mapper namespace="com.github.luguo126.cqas.dao.UserDao" >
+    <!-- 根据用户名和密码查询用户 -->
+    <select id="findUser" parameterType="String" resultType="user">
+	    select *
+	    from user
+	    where user_id = #{user_id} and password=#{password}
+    </select>
+
+    <!-- 插入用户 -->
+    <insert id="insertUser" parameterType="user">
+	    insert into user(user_id, password)
+	    	values(#{user_id}, #{password})
+    </insert>
+
+    <!-- 插入问题 -->
+    <insert id="insertQuestion" parameterType="question">
+        insert into question(content, title, type, user_id, content_md)
+            values(#{content}, #{title}, #{type}, #{user_id}, #{content_md})
+    </insert>
+
+    <!-- 插入答案 -->
+    <insert id="insertAnswer" parameterType="answer">
+        insert into answer(answer, question_id, user_id)
+            values(#{answer}, #{question_id}, #{user_id})
+    </insert>
+
+
+
+    <select id="findQuestion" resultType="question">
+        select * from question
+    </select>
+    <select id="findQuestionWithinTwoHours" resultType="question">
+        select * from question
+    		where ask_date >= (NOW() - interval 2 hour)
+    </select>
+    <select id="findHotQuestions" parameterType="int" resultType="question">
+        select * from question
+            order by surf_number desc limit #{limit_number};
+    </select>
+
+
+
+    <select id="findAnswerByUid" parameterType="String" resultType="answer">
+        select * from answer
+            where user_id = #{uid}
+    </select>
+
+
+
+    <update id="question_like_counter_add_one" parameterType="long">
+        update question set
+            like_number=#{like_number}
+        where question_id=#{qid}
+    </update>
+
+    <update id="question_surf_counter_add_one" parameterType="long">
+        update question set
+            surf_number=surf_number+1
+        where question_id=#{qid}
+    </update>
+
+    <update id="updateUserPassword" parameterType="String">
+        update user set
+            password=#{password}
+        where user_id=(select user_id from user_detail where email=#{email})
+    </update>
+
+
+
+    <update id="update_userdetail_headurl_by_uid" parameterType="String">
+        update user_detail set
+            head_img=#{head_img}
+        where user_id=#{uid}
+    </update>
+
+    <select id="find_user_detail_by_uid" parameterType="String" resultType="userDetail">
+        select * from user_detail
+        where user_id = #{uid}
+    </select>
+
+    <insert id="insert_userdetail_uid" parameterType="String">
+        insert into user_detail(user_id)
+            values(#{uid})
+    </insert>
+
+    <!-- <select id="find_surf_data" resultType="SurfHistory" >
+        select * from surf_history
+            where question_id = #{qid}, user_id = #{uid}
+    </select> -->
+
+
+
+    <insert id="add_surf_data">
+        insert into surf_history(question_id, user_id)
+            values(#{qid}, #{uid})
+    </insert>
+
+    <select id="find_surf_data_by_qid_uid" resultType="SurfHistory" >
+        select * from surf_history
+            where question_id = #{qid} and user_id = #{uid}
+    </select>
+
+    <update id="update_surf_date">
+        update surf_history set
+        surf_date = NOW()
+        where question_id = #{qid} and user_id = #{uid}
+    </update>
+
+    <update id="update_surfhistory_thumbsup_set_true">
+        update surf_history set
+        thumbsup = true
+        where question_id = #{qid} and user_id = #{uid}
+    </update>
+
+
+    <update id="update_surfhistory_answered_set_true">
+        update surf_history set
+        answered = true
+        where question_id = #{qid} and user_id = #{uid}
+    </update>
+
+    <update id="add_question_answer_number_one" parameterType="long">
+        update question set
+        answer_number = answer_number + 1
+        where question_id = #{qid}
+    </update>
+
+    <select id="findQuestionsBasedOnSurfhistory" parameterType="String" resultType="question">
+        select surf_history.question_id as question_id, surf_history.user_id as user_id,  question.title as title, question.type as type,
+        				question.surf_number as surf_number, question.like_number as like_number, question.answer_number as answer_number
+        from  surf_history left join   question
+        on (question.question_id = surf_history.question_id)
+        where surf_history.user_id = #{uid}
+    </select>
+
+    <select id="findAnsweredQuestionFromSurfhistory" parameterType="String" resultType="question">
+        select surf_history.question_id as question_id, surf_history.user_id as user_id,  question.title as title, question.type as type,
+        				question.surf_number as surf_number, question.like_number as like_number, question.answer_number as answer_number
+        from  surf_history left join   question
+        on (question.question_id = surf_history.question_id)
+        where surf_history.user_id = #{uid} and question.answer_number > 0
+    </select>
+
+
+    <select id="findQuestionByTypeNRows" resultType="question">
+        select * from question
+        where type = #{type}
+        order by surf_number desc limit #{nrow}
+    </select>
+
+    <select id="findQuestionByTypeWithMostAnswers" resultType="question">
+        select * from question
+        where type = #{type}
+        order by answer_number asc limit #{nrow}
+    </select>
+
+
+
+
+</mapper>

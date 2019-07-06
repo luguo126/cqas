@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.github.luguo126.cqas.dao.AdminDao" >
+    <!-- 根据用户名和密码查询用户 -->
+    <select id="findAdmin" parameterType="String" resultType="admin">
+	    select *
+	    from admin
+	    where admin_id = #{admin_id} and password=#{password}
+    </select>
+
+
+    <select id="findAdminByID" parameterType="String" resultType="admin">
+        select *
+        from admin
+        where admin_id=#{admin_id}
+    </select>
+
+
+    <!-- 插入管理员 -->
+    <select id="insertAdmin" parameterType="admin">
+	    insert into admin(admin_id, name, password)
+	    	values(#{admin_id}, #{name} ,#{password})
+    </select>
+
+    <!-- 插入问题 -->
+    <select id="insertQuestion" parameterType="question">
+        insert into question(content, publisher)
+            values(#{content}, #{publisher})
+    </select>
+
+    <select id="findAllUsers" resultType="user">
+        select * from user
+    </select>
+
+    <delete id="delete_user_by_uid" parameterType="String">
+        delete from user
+            where user_id = #{uid}
+    </delete>
+
+</mapper>
